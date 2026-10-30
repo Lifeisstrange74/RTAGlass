@@ -1,0 +1,38 @@
+# The reference build's fingerprint (scripts/build/fingerprint.py): what build.py checks a new build against.
+# Made with MSVC v141 14.16.27023 (Visual Studio 2022 17.14), Windows SDK 7.1A, DirectX SDK (June 2010), Python 3.13
+# and requirements.txt. Another v141 update gives different tools\*.exe; everything else should still match.
+file dist/RTAGlass/README.txt  a5e83a8fbf0981e7a3db0c29d9d12da36ca89f79c0454a391ff1365ac295adfe
+file dist/RTAGlass/data/collision.rpk  1fefe5927cc58f66cd56f275fb29450420593bdcf89fb3f5653ad3d5f25cc86f
+file dist/RTAGlass/data/models.rpk  e399df88d6459244a8ed7d73dd4b1d3467495490f55c7ab681a0d529b237a188
+file dist/RTAGlass/data/textures.rpk  9559a0cf375e663f5891cfb911da5bb900f4dad6290571aa71c0b86cae5685cb
+file dist/RTAGlass/tools/adpconv.exe  f69052a4217f94c676a6bcd9dcf5c86b0e248d8ac282ce4d2351a3d5e15d9b49
+file dist/RTAGlass/tools/rpak.exe  be2160eb668038692dc1c7ab3e790fc1c52c4fb20bd39a900fe5aaab9d6c7db2
+file src/game/field/field_coins.inc  3e41d67f4f23929fc99065a3ccf987f398ae109bd1ab465a9c27482096a0be7d
+file src/game/field/field_objects.inc  c3801a5ab6fbe3fe7ed45614f38b1130c1437c375d5472f9790a12f609741444
+file src/game/field/field_stamps.inc  aa71d985aaee8ac8fd87c56c23f227f76ec4cf225361c92fe59e9fe243287c1e
+file src/game/field/field_towns.inc  538186ce602f8b6ed63d341cf65a3e33e8246cce00d149ae86b7fb4f01c2d2ec
+file src/game/race/adventure_speeds.inc  87ddc60c7009089b12babfca3e6bdd997d86e33ac72ead46f8c256a078661b43
+file src/game/race/car_jets.inc  cc781ec0aeb4ec0adc87b64cf13c10a554b8534fc0939d6af93d3a3fbd295533
+file src/game/race/car_parts.inc  09af4c7e6220ba2d8e127cf4a2ee4ffff4d93c62e09b597c752e4006a8202ee0
+file src/game/race/driver_records.inc  d6e0fe4fe9af0fa46f49b78cbcf7539470b61b5aa0a08b9e1cac66b0ac7c730e
+file src/game/race/figure8_tables.inc  29a363439c4d3abf38efc9ba37032a80e2f2f4e973e3fed1b95fc65a0b40ce76
+file src/game/race/golf_tables.inc  51fab4d034be3c0bcca48753a27804b65bf32a69627427bd148e5ec65c15152a
+file src/game/save/save_tables.inc  b7a49a4db48fe9613d914624c210c0e5e7f98554646ec1279195584c52f26a78
+file src/game/story/adventure_races.inc  7ac24325ac1aa9748b1216122e09064ab2ea1a01de51fb55c23b104647d8eb92
+file src/game/story/parts_tables.inc  6653bd1e435c9640f5d4624ea6a6669ccff1dee14d8f05cee8253d7dfb7d4b37
+file src/game_text.inc  2dc12c4d3c6346b6cee2b80c63f95be9304e39e738496536faceac79bfe06d3e
+file src/rtaglass.ico  d5973453a5ccfa20c63f35f2d9447fd88616a138345fbdedefe96d2c602c4944
+file tools/common/vu1/vu1_microcode.gen.cpp  6d94fb3b3ba959539d0d6ac340fefbe8e1e371a20956ddf58a1b37baa673da38
+tree data/ai  cf98c79e1c797f255b03945209be05f4e5265c598b101706722e6d795bc9bec9 203
+tree data/camera  f98c62bc7be32b4c2f96227d5894c9e8053476b34a60c6c73e25bd07b9c72585 40
+tree data/collision  f1e0a36c5ac2ee8008eeeb748c87e3702e1650aa8ae8cf3e76dcb402c733d92a 130
+tree data/models  f942a0f85d16f575d65a8918cd1febd409f1550ae16bc13c3ceebc6bfa11641b 14511
+tree data/sound  287c8f7bafb6519740930c407aefe1b2e62db4d6d24742cf923ac075d7fb3130 144
+tree data/story  e794fc713b1c1e7e610c944caf9c8e4ff4250a9ce54f6e3504077fba109c82ea 2
+tree data/textures  b39625125fb8ff4ef5618ff2b637110b637453b3c3ea79f919ce3e89691871c1 3305
+tree dist/RTAGlass/data/ai  cf98c79e1c797f255b03945209be05f4e5265c598b101706722e6d795bc9bec9 203
+tree dist/RTAGlass/data/camera  f98c62bc7be32b4c2f96227d5894c9e8053476b34a60c6c73e25bd07b9c72585 40
+tree dist/RTAGlass/data/sound  287c8f7bafb6519740930c407aefe1b2e62db4d6d24742cf923ac075d7fb3130 144
+tree dist/RTAGlass/data/story  e794fc713b1c1e7e610c944caf9c8e4ff4250a9ce54f6e3504077fba109c82ea 2
+tree reference/asm  80f953cc7611f94cc697ba46fa2fcdfa5d6a31e5dfd93d48cc9e7de0557eaa02 1650
+tree reference/vu  cf1e6ec515ca4537ee57df0ecd0d2f0f5380c2c1f8b62f3828cdfe609916bb8d 6

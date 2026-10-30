@@ -1,0 +1,60 @@
+# Everything made from the game by build.bat. The game's files never go in this repo.
+/game/
+/data/*
+!/data/README.md
+/reference/asm/
+/reference/vu/
+/src/**/*.inc
+/src/rtaglass.ico
+/tools/common/vu1/vu1_microcode.gen.cpp
+# Disc images, wherever they're put
+*.bin
+*.cue
+*.iso
+
+# Build outputs (dist/ is the assembled player folder: the exe plus a copy of data)
+/bin/
+/obj/
+/dist/
+/.venv/
+tools/*/bin/
+tools/*/obj/
+
+# Visual Studio / MSBuild
+.vs/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+ipch/
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.iobj
+*.ipdb
+*.tlog
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Test harness output (rebuild with each build_test.bat; scripts/vu/make_vectors.py writes vectors.bin)
+/tests/*/build/
+/tests/gs/out/
+/tests/vu1/vectors.bin
+
+# Development-only tools and harnesses, kept locally but not published
+/scripts/pcsx2/
+/scripts/sound/
+/scripts/vu/make_vectors.py
+/scripts/vu/run_packets.py
+/scripts/vu/vifload.py
+/tests/
+/tools/gsplay/
+/docs/graphics-plan.md
+/docs/gs-inventory.md
+/docs/survey.md
+/docs/modules.md
+/docs/completion_audit.md

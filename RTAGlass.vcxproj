@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{9145EC5E-2E53-4FFE-8C19-523B16520A10}</ProjectGuid>
+    <RootNamespace>RTAGlass</RootNamespace>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="props\DXSDK.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <!-- XP is the deliberate minimum target; silence MSB8051. -->
+    <XPDeprecationWarning>false</XPDeprecationWarning>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>false</SDLCheck>
+      <!-- /permissive- breaks the Windows 7.1A SDK headers (objbase.h). -->
+      <ConformanceMode>false</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(IntDir)shaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_WIN32_WINNT=0x0501;WINVER=0x0501;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!-- Thread-safe statics rely on TLS that is unreliable on XP. -->
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+      <!-- The CPU floor, from build.py's arch option (or the property RTAGlassArch): SSE2 (the compiler's default), SSE or IA32 (x87,
+           for CPUs before the Pentium 4). -->
+      <EnableEnhancedInstructionSet Condition="'$(RTAGlassArch)'=='SSE'">StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(RTAGlassArch)'=='IA32'">NoExtensions</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d9.lib;ole32.lib;shell32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <!-- The distribution folder: everything a player needs, in dist\RTAGlass (robocopy only copies
+         changed data files, so this is quick after the first build). The textures, models and collision data
+         go in packed, as data\textures.rpk, models.rpk and collision.rpk (tools/rpak, built first; each is
+         repacked only when its folder has changed), and rpak.exe and adpconv.exe go in tools\ for
+         modders. -->
+    <PostBuildEvent>
+      <Message>Assembling dist\RTAGlass</Message>
+      <Command>set DIST=$(SolutionDir)dist\RTAGlass
+if not exist "%DIST%" mkdir "%DIST%"
+copy /Y "$(TargetPath)" "%DIST%\" &gt;nul || exit /b 1
+copy /Y "$(ProjectDir)package\README.txt" "%DIST%\" &gt;nul || exit /b 1
+robocopy "$(ProjectDir)data" "%DIST%\data" /MIR /XD "$(ProjectDir)data\textures" "$(ProjectDir)data\models" "$(ProjectDir)data\collision" /XF README.md *.rpk /NFL /NDL /NJH /NJS /NP &gt;nul
+if errorlevel 8 exit /b 1
+for %%F in (textures models collision) do (
+  if exist "%DIST%\data\%%F" rmdir /s /q "%DIST%\data\%%F"
+  "$(OutDir)rpak.exe" pack "$(ProjectDir)data\%%F" "%DIST%\data\%%F.rpk" --update || exit /b 1
+)
+if not exist "%DIST%\tools" mkdir "%DIST%\tools"
+copy /Y "$(OutDir)rpak.exe" "%DIST%\tools\" &gt;nul || exit /b 1
+copy /Y "$(OutDir)adpconv.exe" "%DIST%\tools\" &gt;nul || exit /b 1
+exit /b 0</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\audio\adpcm.cpp" />
+    <ClCompile Include="src\audio\midi_file.cpp" />
+    <ClCompile Include="src\audio\radio.cpp" />
+    <ClCompile Include="src\audio\sound.cpp" />
+    <ClCompile Include="src\audio\soundfont.cpp" />
+    <ClCompile Include="src\audio\synth.cpp" />
+    <ClCompile Include="src\audio\xaudio2_out.cpp" />
+    <ClCompile Include="src\game\text.cpp" />
+    <ClCompile Include="src\game\hud\hud_parts.cpp" />
+    <ClCompile Include="src\game\hud\hud_games.cpp" />
+    <ClCompile Include="src\game\hud\minimap.cpp" />
+    <ClCompile Include="src\game\hud\race_hud.cpp" />
+    <ClCompile Include="src\game\hud\speedometer.cpp" />
+    <ClCompile Include="src\game\hud\meters.cpp" />
+    <ClCompile Include="src\game\flow\loading.cpp" />
+    <ClCompile Include="src\game\flow\name_entry.cpp" />
+    <ClCompile Include="src\game\flow\new_game.cpp" />
+    <ClCompile Include="src\game\flow\test_menu.cpp" />
+    <ClCompile Include="src\game\field\field.cpp" />
+    <ClCompile Include="src\game\field\field_ending.cpp" />
+    <ClCompile Include="src\game\field\field_coins.cpp" />
+    <ClCompile Include="src\game\field\field_map.cpp" />
+    <ClCompile Include="src\game\field\field_menu.cpp" />
+    <ClCompile Include="src\game\field\field_menu_screens.cpp" />
+    <ClCompile Include="src\game\field\field_objects.cpp" />
+    <ClCompile Include="src\game\field\field_town_cars.cpp" />
+    <ClCompile Include="src\game\field\field_world.cpp" />
+    <ClCompile Include="src\game\story\message_task.cpp" />
+    <ClCompile Include="src\game\story\messages.cpp" />
+    <ClCompile Include="src\game\story\paint_screen.cpp" />
+    <ClCompile Include="src\game\story\parts_screen.cpp" />
+    <ClCompile Include="src\game\story\race_list.cpp" />
+    <ClCompile Include="src\game\story\garage_scene.cpp" />
+    <ClCompile Include="src\game\story\ending.cpp" />
+    <ClCompile Include="src\game\story\photo.cpp" />
+    <ClCompile Include="src\game\story\mail_screen.cpp" />
+    <ClCompile Include="src\game\story\room_scene.cpp" />
+    <ClCompile Include="src\game\pad\vibration.cpp" />
+    <ClCompile Include="src\game\save\save_data.cpp" />
+    <ClCompile Include="src\game\save\save_screens.cpp" />
+    <ClCompile Include="src\game\results\adventure_results.cpp" />
+    <ClCompile Include="src\game\results\grand_prix_results.cpp" />
+    <ClCompile Include="src\game\results\versus_results.cpp" />
+    <ClCompile Include="src\game\versus\versus.cpp" />
+    <ClCompile Include="src\game\save\save_file.cpp" />
+    <ClCompile Include="src\game\quickrace\course_select.cpp" />
+    <ClCompile Include="src\game\race\ai.cpp" />
+    <ClCompile Include="src\game\race\car.cpp" />
+    <ClCompile Include="src\game\race\car_physics.cpp" />
+    <ClCompile Include="src\game\race\collision.cpp" />
+    <ClCompile Include="src\game\race\course.cpp" />
+    <ClCompile Include="src\game\race\course_objects.cpp" />
+    <ClCompile Include="src\game\race\tex_anim.cpp" />
+    <ClCompile Include="src\game\race\race.cpp" />
+    <ClCompile Include="src\game\race\race_light.cpp" />
+    <ClCompile Include="src\game\race\race_events.cpp" />
+    <ClCompile Include="src\game\race\race_soccer.cpp" />
+    <ClCompile Include="src\game\race\race_barrels.cpp" />
+    <ClCompile Include="src\game\race\race_games.cpp" />
+    <ClCompile Include="src\game\race\race_roulette.cpp" />
+    <ClCompile Include="src\game\race\race_figure8.cpp" />
+    <ClCompile Include="src\game\race\race_golf.cpp" />
+    <ClCompile Include="src\game\race\race_zone_table.cpp" />
+    <ClCompile Include="src\game\race\pause_menu.cpp" />
+    <ClCompile Include="src\game\race\car_effects.cpp" />
+    <ClCompile Include="src\game\race\chase_camera.cpp" />
+    <ClCompile Include="src\game\race\race_camera.cpp" />
+    <ClCompile Include="src\game\title\title_menu.cpp" />
+    <ClCompile Include="src\game\title\title_results.cpp" />
+    <ClCompile Include="src\game\title\title_sequence.cpp" />
+    <ClCompile Include="src\game\ui\window.cpp" />
+    <ClCompile Include="src\game\ui\controls_screen.cpp" />
+    <ClCompile Include="src\game\ui\display_screen.cpp" />
+    <ClCompile Include="src\game\ui\extras_screen.cpp" />
+    <ClCompile Include="src\game\ui\option_windows.cpp" />
+    <ClCompile Include="src\game\extras.cpp" />
+    <ClCompile Include="src\game\debug_text.cpp" />
+    <ClCompile Include="src\gfx\draw2d.cpp" />
+    <ClCompile Include="src\gfx\mesh.cpp" />
+    <ClCompile Include="src\gfx\model.cpp" />
+    <ClCompile Include="src\platform\input.cpp" />
+    <ClCompile Include="src\platform\controls.cpp" />
+    <ClCompile Include="src\platform\display.cpp" />
+    <ClCompile Include="src\gfx\d3d9\d3d9_renderer.cpp" />
+    <ClCompile Include="src\gfx\textures\texture_set.cpp" />
+    <ClCompile Include="src\util\data_pack.cpp" />
+    <ClCompile Include="src\util\image_write.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\audio\audio_out.h" />
+    <ClInclude Include="src\audio\adpcm.h" />
+    <ClInclude Include="src\audio\midi_file.h" />
+    <ClInclude Include="src\audio\radio.h" />
+    <ClInclude Include="src\audio\sound.h" />
+    <ClInclude Include="src\audio\soundfont.h" />
+    <ClInclude Include="src\audio\synth.h" />
+    <ClInclude Include="src\game\perf_where.h" />
+    <ClInclude Include="src\game\text.h" />
+    <ClInclude Include="src\game\hud\hud_parts.h" />
+    <ClInclude Include="src\game\hud\minimap.h" />
+    <ClInclude Include="src\game\hud\race_hud.h" />
+    <ClInclude Include="src\game\hud\speedometer.h" />
+    <ClInclude Include="src\game\flow\loading.h" />
+    <ClInclude Include="src\game\flow\name_entry.h" />
+    <ClInclude Include="src\game\flow\new_game.h" />
+    <ClInclude Include="src\game\flow\test_menu.h" />
+    <ClInclude Include="src\game\field\field.h" />
+    <ClInclude Include="src\game\field\field_coins.h" />
+    <ClInclude Include="src\game\field\field_coins.inc" />
+    <ClInclude Include="src\game\field\field_map.h" />
+    <ClInclude Include="src\game\field\field_menu.h" />
+    <ClInclude Include="src\game\field\field_menu_draw.h" />
+    <ClInclude Include="src\game\field\field_objects.h" />
+    <ClInclude Include="src\game\field\field_town_cars.h" />
+    <ClInclude Include="src\game\field\field_world.h" />
+    <ClInclude Include="src\game\field\field_objects.inc" />
+    <ClInclude Include="src\game\field\field_towns.inc" />
+    <ClInclude Include="src\game\story\message_task.h" />
+    <ClInclude Include="src\game\story\messages.h" />
+    <ClInclude Include="src\game\story\paint_screen.h" />
+    <ClInclude Include="src\game\story\parts_screen.h" />
+    <ClInclude Include="src\game\story\adventure_races.inc" />
+    <ClInclude Include="src\game\story\parts_tables.inc" />
+    <ClInclude Include="src\game\story\race_list.h" />
+    <ClInclude Include="src\game\story\garage_scene.h" />
+    <ClInclude Include="src\game\story\ending.h" />
+    <ClInclude Include="src\game\story\photo.h" />
+    <ClInclude Include="src\game\story\mail_screen.h" />
+    <ClInclude Include="src\game\story\room_scene.h" />
+    <ClInclude Include="src\game\pad\vibration.h" />
+    <ClInclude Include="src\game\save\save_data.h" />
+    <ClInclude Include="src\game\save\save_file.h" />
+    <ClInclude Include="src\game\save\save_tables.inc" />
+    <ClInclude Include="src\game\quickrace\course_select.h" />
+    <ClInclude Include="src\game\save\save_screens.h" />
+    <ClInclude Include="src\game\results\adventure_results.h" />
+    <ClInclude Include="src\game\results\grand_prix_results.h" />
+    <ClInclude Include="src\game\results\versus_results.h" />
+    <ClInclude Include="src\game\versus\versus.h" />
+    <ClInclude Include="src\game\race\ai.h" />
+    <ClInclude Include="src\game\race\car.h" />
+    <ClInclude Include="src\game\race\car_physics.h" />
+    <ClInclude Include="src\game\race\car_jets.inc" />
+    <ClInclude Include="src\game\race\car_parts.inc" />
+    <ClInclude Include="src\game\race\driver_records.inc" />
+    <ClInclude Include="src\game\race\adventure_speeds.inc" />
+    <ClInclude Include="src\game\race\collision.h" />
+    <ClInclude Include="src\game\race\course.h" />
+    <ClInclude Include="src\game\race\course_objects.h" />
+    <ClInclude Include="src\game\race\tex_anim.h" />
+    <ClInclude Include="src\game\race\race.h" />
+    <ClInclude Include="src\game\race\race_light.h" />
+    <ClInclude Include="src\game\race\pause_menu.h" />
+    <ClInclude Include="src\game\race\car_effects.h" />
+    <ClInclude Include="src\game\race\chase_camera.h" />
+    <ClInclude Include="src\game\race\race_camera.h" />
+    <ClInclude Include="src\game\title\title_menu.h" />
+    <ClInclude Include="src\game\title\title_results.h" />
+    <ClInclude Include="src\game\title\title_sequence.h" />
+    <ClInclude Include="src\game\ui\window.h" />
+    <ClInclude Include="src\game\ui\controls_screen.h" />
+    <ClInclude Include="src\game\ui\display_screen.h" />
+    <ClInclude Include="src\game\ui\extras_screen.h" />
+    <ClInclude Include="src\game\ui\option_windows.h" />
+    <ClInclude Include="src\game\extras.h" />
+    <ClInclude Include="src\game\debug_text.h" />
+    <ClInclude Include="src\gfx\d3d9\d3d9_renderer.h" />
+    <ClInclude Include="src\gfx\draw2d.h" />
+    <ClInclude Include="src\gfx\mesh.h" />
+    <ClInclude Include="src\gfx\model.h" />
+    <ClInclude Include="src\platform\input.h" />
+    <ClInclude Include="src\platform\controls.h" />
+    <ClInclude Include="src\platform\display.h" />
+    <ClInclude Include="src\gfx\render\renderer.h" />
+    <ClInclude Include="src\gfx\textures\texture_set.h" />
+    <ClInclude Include="src\util\data_pack.h" />
+    <ClInclude Include="src\util\files.h" />
+    <ClInclude Include="src\util\image_write.h" />
+    <ClInclude Include="src\util\json.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\rtaglass.rc" />
+  </ItemGroup>
+  <!-- Shaders: the DXSDK's fxc compiles each entry point of render.hlsl to a bytecode header in $(IntDir)shaders,
+       so the game needs no D3DX at run time. -->
+  <ItemGroup>
+    <CustomBuild Include="src\gfx\d3d9\shaders\render.hlsl">
+      <Message>Compiling shaders: %(Filename)%(Extension)</Message>
+      <Command>if not exist "$(IntDir)shaders" mkdir "$(IntDir)shaders"
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T vs_2_0 /E VSMain /Vn g_vsMain /Fh "$(IntDir)shaders\render_vs.h" "%(FullPath)" || exit /b 1
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T vs_2_0 /E VSMesh /Vn g_vsMesh /Fh "$(IntDir)shaders\render_vs_mesh.h" "%(FullPath)" || exit /b 1
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T ps_2_0 /E PSColor /Vn g_psColor /Fh "$(IntDir)shaders\render_ps_color.h" "%(FullPath)" || exit /b 1
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T ps_2_0 /E PSTexture /Vn g_psTexture /Fh "$(IntDir)shaders\render_ps_texture.h" "%(FullPath)" || exit /b 1
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T ps_2_0 /E PSCopy /Vn g_psCopy /Fh "$(IntDir)shaders\render_ps_copy.h" "%(FullPath)" || exit /b 1
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T ps_2_0 /E PSMeshColor /Vn g_psMeshColor /Fh "$(IntDir)shaders\render_ps_mesh_color.h" "%(FullPath)" || exit /b 1
+"$(DXSDKPath)Utilities\bin\x86\fxc.exe" /nologo /T ps_2_0 /E PSMeshTexture /Vn g_psMeshTexture /Fh "$(IntDir)shaders\render_ps_mesh_texture.h" "%(FullPath)" || exit /b 1</Command>
+      <Outputs>$(IntDir)shaders\render_vs.h;$(IntDir)shaders\render_vs_mesh.h;$(IntDir)shaders\render_ps_color.h;$(IntDir)shaders\render_ps_texture.h;$(IntDir)shaders\render_ps_copy.h;$(IntDir)shaders\render_ps_mesh_color.h;$(IntDir)shaders\render_ps_mesh_texture.h</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

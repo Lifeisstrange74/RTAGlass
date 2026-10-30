@@ -1,0 +1,59 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.0.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RTAGlass", "RTAGlass.vcxproj", "{9145EC5E-2E53-4FFE-8C19-523B16520A10}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54} = {C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54}
+		{1EBE7FA1-5875-4597-8C5E-FD87BE24C133} = {1EBE7FA1-5875-4597-8C5E-FD87BE24C133}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texconv", "tools\texconv\texconv.vcxproj", "{48C15B7F-A0E6-48C4-BFA2-15FDC3E06A42}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modelconv", "tools\modelconv\modelconv.vcxproj", "{6E2B1C94-3F57-4D0A-9B8E-2C7A5D4F81B3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sndconv", "tools\sndconv\sndconv.vcxproj", "{A3C5E7F1-2B4D-4E6F-8A1C-3D5E7F9B2C40}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rpak", "tools\rpak\rpak.vcxproj", "{C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "adpconv", "tools\adpconv\adpconv.vcxproj", "{1EBE7FA1-5875-4597-8C5E-FD87BE24C133}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9145EC5E-2E53-4FFE-8C19-523B16520A10}.Debug|x86.ActiveCfg = Debug|Win32
+		{9145EC5E-2E53-4FFE-8C19-523B16520A10}.Debug|x86.Build.0 = Debug|Win32
+		{9145EC5E-2E53-4FFE-8C19-523B16520A10}.Release|x86.ActiveCfg = Release|Win32
+		{9145EC5E-2E53-4FFE-8C19-523B16520A10}.Release|x86.Build.0 = Release|Win32
+		{48C15B7F-A0E6-48C4-BFA2-15FDC3E06A42}.Debug|x86.ActiveCfg = Debug|Win32
+		{48C15B7F-A0E6-48C4-BFA2-15FDC3E06A42}.Debug|x86.Build.0 = Debug|Win32
+		{48C15B7F-A0E6-48C4-BFA2-15FDC3E06A42}.Release|x86.ActiveCfg = Release|Win32
+		{48C15B7F-A0E6-48C4-BFA2-15FDC3E06A42}.Release|x86.Build.0 = Release|Win32
+		{6E2B1C94-3F57-4D0A-9B8E-2C7A5D4F81B3}.Debug|x86.ActiveCfg = Debug|Win32
+		{6E2B1C94-3F57-4D0A-9B8E-2C7A5D4F81B3}.Debug|x86.Build.0 = Debug|Win32
+		{6E2B1C94-3F57-4D0A-9B8E-2C7A5D4F81B3}.Release|x86.ActiveCfg = Release|Win32
+		{6E2B1C94-3F57-4D0A-9B8E-2C7A5D4F81B3}.Release|x86.Build.0 = Release|Win32
+		{A3C5E7F1-2B4D-4E6F-8A1C-3D5E7F9B2C40}.Debug|x86.ActiveCfg = Debug|Win32
+		{A3C5E7F1-2B4D-4E6F-8A1C-3D5E7F9B2C40}.Debug|x86.Build.0 = Debug|Win32
+		{A3C5E7F1-2B4D-4E6F-8A1C-3D5E7F9B2C40}.Release|x86.ActiveCfg = Release|Win32
+		{A3C5E7F1-2B4D-4E6F-8A1C-3D5E7F9B2C40}.Release|x86.Build.0 = Release|Win32
+		{C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54}.Debug|x86.ActiveCfg = Debug|Win32
+		{C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54}.Debug|x86.Build.0 = Debug|Win32
+		{C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54}.Release|x86.ActiveCfg = Release|Win32
+		{C7A4E2D9-5B1F-4C3E-9D82-6F0B3A7E1D54}.Release|x86.Build.0 = Release|Win32
+		{1EBE7FA1-5875-4597-8C5E-FD87BE24C133}.Debug|x86.ActiveCfg = Debug|Win32
+		{1EBE7FA1-5875-4597-8C5E-FD87BE24C133}.Debug|x86.Build.0 = Debug|Win32
+		{1EBE7FA1-5875-4597-8C5E-FD87BE24C133}.Release|x86.ActiveCfg = Release|Win32
+		{1EBE7FA1-5875-4597-8C5E-FD87BE24C133}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52CFE92B-57CE-4F29-9F31-5FD35C0E3FBC}
+	EndGlobalSection
+EndGlobal

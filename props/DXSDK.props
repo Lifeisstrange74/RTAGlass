@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DirectX SDK (June 2010) paths. DXSDK_DIR is intentionally not used;
+     override DXSDKPath on the MSBuild command line if the SDK lives elsewhere. -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <DXSDKPath Condition="'$(DXSDKPath)' == ''">C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\</DXSDKPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(DXSDKPath)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDKPath)Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="DXSDKPath">
+      <Value>$(DXSDKPath)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

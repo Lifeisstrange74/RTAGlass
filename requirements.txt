@@ -1,0 +1,14 @@
+# Python packages for build.bat, which installs them into .venv (exact versions: the build's output is checked
+# byte for byte against the reference build's, scripts/build/expected.txt).
+splat64[mips]==0.50.1      # the disassembly (reference/asm)
+spimdisasm==1.42.4
+rabbitizer==1.16.2
+crunch64==0.6.2
+PyYAML==6.0.3
+pylibyaml==0.1.0
+intervaltree==3.1.0
+sortedcontainers==2.4.0
+tqdm==4.67.1
+colorama==0.4.6
+numpy==2.5.4               # scripts/course/make_c16.py
+pillow==13.0.0             # scripts/make_icon.py

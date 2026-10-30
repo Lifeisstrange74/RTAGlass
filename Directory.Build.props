@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Every project in the solution (MSBuild imports this file by itself). Reproducible builds: /Brepro replaces the
+     time stamps in the objects and the exe with hashes of their contents, and /PDBALTPATH keeps only the PDB's file
+     name in the exe, not the folder it was built in. The same sources and toolset give the same exe anywhere, which
+     is how the public repo's build checks itself against this one (scripts/build). -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalOptions>/Brepro %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/Brepro /PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

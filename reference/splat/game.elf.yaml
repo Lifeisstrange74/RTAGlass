@@ -1,0 +1,93 @@
+# splat (splat64 0.50.1) config for SLUS_203.98: build.py runs it on the ELF's two load segments laid out from
+# 0x00200000 (the sha1 below) and copies asm/ to reference/asm. Every function stays assembly: this is the reference
+# the port is read from, not a matching decompilation.
+sha1: c0567f519fc845258b157f3b5382b2ded32b8c1c
+options:
+  disassemble_all: True
+  auto_decompile_empty_functions: False
+  basename: game.elf
+  target_path: game.elf.rom
+  elf_path: build/game.elf.elf
+  base_path: .
+  platform: ps2
+  compiler: EEGCC
+
+  gp_value: 0x0033AAF0
+  ld_gp_expression: cod_LIT4_START + 0x7FF0
+
+  # asm_path: asm
+  # src_path: src
+  # build_path: build
+
+  ld_script_path: game.elf.ld
+  ld_dependencies: True
+  ld_wildcard_sections: True
+  ld_bss_contains_common: True
+
+  create_asm_dependencies: True
+
+  find_file_boundaries: False
+
+  o_as_suffix: True
+
+  symbol_addrs_path:
+    - symbol_addrs.txt
+  reloc_addrs_path:
+    - reloc_addrs.txt
+
+  # undefined_funcs_auto_path: undefined_funcs_auto.txt
+  # undefined_syms_auto_path: undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  named_regs_for_c_funcs: False
+
+  section_order:
+    - .text
+    # - .vutext
+    - .data
+    # - .ctors
+    # - .dtors
+    # - .eh_frame
+    - .rodata
+    - .lit4
+    - .sdata
+    - .sbss
+    - .bss
+
+  auto_link_sections:
+    - .data
+    # - .ctors
+    # - .dtors
+    # - .eh_frame
+    - .rodata
+    - .lit4
+    - .sdata
+    - .sbss
+    - .bss
+
+segments:
+  - name: cod
+    type: code
+    start: 0x000000
+    vram: 0x00200000
+    bss_size: 0x1451E20
+    subalign: null
+    subsegments:
+      - [0x000000, c, cod]
+      - [0x08E730, textbin, cod/08E730] # .vutext
+      - [0x09A880, data, cod/09A880] # .data
+      - [0x0E99B0, data, cod/0E99B0] # .ctors
+      - [0x0E99B8, data, cod/0E99B8] # .dtors
+      - [0x0E99C0, data, cod/0E99C0] # .eh_frame
+      - [0x0E9A00, rodata, cod/0E9A00] # .rodata
+      - [0x132B00, lit4, cod/132B00] # .lit4
+      - [0x133280, sdata, cod/133280] # .sdata
+      - { type: sbss, vram: 0x00335680, name: cod/00335680 } # .sbss
+      - { type: bss, vram: 0x00335780, name: cod/00335780 } # .bss
+  - [0x13567B]
