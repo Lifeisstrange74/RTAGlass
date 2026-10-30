@@ -1,35 +1,34 @@
 # RTAGlass
 
-> **Unofficial fan project.** Road Trip and Choro Q are trademarks of their owners. This project is not
-> affiliated with or endorsed by them.
+> Road Trip and Choro Q are trademarks of their owners. This project is an **unofficial fan project that is 
+> not affiliated with or endorsed by them.**
 
-RTAGlass is a native Windows port of **Road Trip** (PS2, SLUS-203.98; Choro Q HG 2 in Japan, Road Trip Adventure in Europe). It is a high-level
-reimplementation in C++. It runs on Windows XP SP2 and later.
+RTAGlass is a native Windows port of **Road Trip** for the PS2, (known as Choro Q HG 2 in Japan and Road Trip Adventure in Europe). 
+It's a high-level reimplementation in C++ that will run on any PC using Windows XP SP2 or above, provided you have a DirectX9.0-compatible GPU.
 
-**This repository contains none of the game.** It holds the port's own code, tools and research. The build makes
-everything else from your own copy of the disc: the textures, models and sound, the disassembly, and the tables the
-code reads from the game's executable.
+This repository contains the tools, research, and code for RTAGlass. The build script draws the textures, models and sound, the disassembly, 
+and in-game text the game uses from your OWN backup of the game. **THIS REPOSITORY DOESN'T HAVE THE GAME ITSELF.**
 
-## Building
+## How to build
 
 You need:
 
-- **Road Trip Game Files** as a `.cue`/`.bin` (or `.iso`). Only the USA release (SLUS-203.98) works, and
-  the build checks every file on it.
-- **Windows 10 or 11** to build. The game it makes runs on XP and up.
-- **Visual Studio 2022** (Community is enough) with these individual components: **MSVC v141 - VS 2017 C++ x64/x86
-  build tools** and **C++ Windows XP Support for VS 2017 (v141) tools**.
-- **DirectX SDK (June 2010)**, at its default path or given with `--dxsdk`. On Windows 10/11, install .NET
-  Framework 3.5 first. An S1023 error at the end of its setup is harmless.
+- **Road Trip** as a `.cue`/`.bin` (or `.iso`). Only the USA release (SLUS-20398) works, and
+  the script verifies you're using the right version.
+- **Windows 10 or 11** to build.
+- **Visual Studio 2022** (Community is fine) with the **MSVC v141 - VS 2017 C++ x64/x86 build tools**
+  and **C++ Windows XP Support for VS 2017 (v141) tools**.
+- **DirectX SDK from June 2010** either at its default path or given with `--dxsdk`. On Windows 10/11,
+  install .NET Framework 3.5 first. The S1023 error after installation is safe to ignore.
 - **Python 3.11 or later.** The build installs the packages it needs (`requirements.txt`) into a private `.venv`.
 
 Then run:
 
 ```
-build.bat "D:\Dumps\Road Trip (USA).cue"
+build.bat "<the path to>\Road Trip (USA).cue"
 ```
 
-With no argument, it uses the one `.cue` it finds in the repo's folder or the folder above it. The build takes a few
+Without an argument, the script uses the one `.cue` it finds in the repo's folder or the folder above it. The build takes a few
 minutes. It finishes with the game in **`dist\RTAGlass`**, a folder you can copy anywhere and play from. For sound,
 players need the DirectX End-User Runtime (see `package/README.txt`, which is copied into that folder).
 
@@ -51,7 +50,7 @@ What `build.bat` does, step by step (each step's log is in `obj\build`):
 
 ## After the first build
 
-Once `build.bat` has run, the repo is a normal Visual Studio solution. Open `RTAGlass.sln`, or from the repo root:
+After `build.bat` finishes, the repo is a normal VS solution. Open `RTAGlass.sln`, or from the repo root:
 
 ```
 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" RTAGlass.sln ^
@@ -72,23 +71,18 @@ set RTAGLASS_GAME=game
 
 Formats and converter flags are in [`data/README.md`](data/README.md).
 
-## Running the game
+## How to use your new recomp
 
-The game can be ran by executing RTAGlass.exe from the dist folder. Please ensure that the `data` folder remains next to the executable.
+Run RTAGlass.exe from the `dist\RTAGlass` folder the project generates. If the `data` folder is not in the same folder as the .exe itself, it won't run.
 
 ## Documentation index (`docs`)
 
 | Area | Docs |
 |---|---|
-| Overview | `names.csv` (every function the port reimplements), `debug.md` (the original's leftover debug features), `extras.md` (PC switches for unused content, debug features and cheats) |
+| Overview | `names.csv` (every function the port reimplements), `debug.md` (unearthed leftover debug features), `extras.md` (menu f unused content, debug features and cheats) |
 | Graphics | `renderer.md`, `textures.md`, `vu1-microcode.md`, `cars.md`, `effects.md` |
-| Title and menus | `title.md`, `new_game.md`, `course_select.md`, `pause.md`, `controls.md` (the PC's control setup), `display.md` (the PC's display settings and wide screens) |
+| Title and menus | `title.md`, `new_game.md`, `course_select.md`, `pause.md`, `controls.md` (the PC's default control setup), `display.md` (the PC's default display settings) |
 | Races | `race.md`, `car_physics.md`, `ai.md`, `hud.md`, `finish.md`, `events.md`, `minigames.md`, `two_player.md` |
 | Adventure | `field.md`, `buildings.md`, `messages.md`, `parts.md`, `paint.md`, `field_menu*.md`, `save.md` |
 | Sound | `sound.md` |
 
-## Releasing
-
-`dist\RTAGlass` is the player folder. Make sure it holds no `save1.json`/`save2.json`, `controls.json` or other
-settings files (the exe makes its own; ones there are someone's test files), then archive it. **It contains the
-converted game data**, so share it only where you have the right to; anyone with the disc can build their own.
